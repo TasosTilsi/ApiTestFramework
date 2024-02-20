@@ -1,0 +1,9 @@
+<archetype>
+  <id>ApiTestFramework</id>
+  <sources>
+    <source>src/main/java/*.java</source>
+  </sources>
+  <testSources>
+    <source>src/test/java/*.java</source>
+  </testSources>
+</archetype>
