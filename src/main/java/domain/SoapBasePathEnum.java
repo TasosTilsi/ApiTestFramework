@@ -1,16 +1,16 @@
 package domain;
 
+import lombok.Getter;
+
 public enum SoapBasePathEnum {
-    USER_SERVICE("someUserServiceEndpoint");
+    SOAP_SERVICE("/websamples.countryinfo"),
+    COUNTRY_INFO(SOAP_SERVICE.getPath() + "/CountryInfoService.wso");
     
+    @Getter
     private String path;
     
     SoapBasePathEnum(String path) {
         this.path = path;
-    }
-    
-    public String getPath() {
-        return path;
     }
     
     @Override

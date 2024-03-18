@@ -1,6 +1,6 @@
 package utils.config;
 
-import utils.Enums.Environment;
+import utils.enums.Environment;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

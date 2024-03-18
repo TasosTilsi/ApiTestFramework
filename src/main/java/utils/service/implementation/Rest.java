@@ -20,9 +20,9 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import models.ContextData;
 import org.slf4j.Logger;
-import utils.Enums.Environment;
 import utils.common.SerializationUtil;
 import utils.config.SecretsConfig;
+import utils.enums.Environment;
 import utils.factories.RestServiceObjectFactory;
 import utils.service.interfaces.IRestService;
 
@@ -614,7 +614,7 @@ public class Rest implements IRestService {
         if (queryParams != null) {
             request.queryParams(queryParams);
         }
-        if (file != null) {
+        if (file != null && file.exists()) {
             request.contentType(MULTIPART);
             request.multiPart("file", file);
             if (body != null) {
@@ -635,27 +635,6 @@ public class Rest implements IRestService {
     @Override
     public Response sendRequest(RequestSpecification request, Method method, String route) {
         return getResponse(request, method, route);
-    }
-    
-    /**
-     * Sends a fallback request using the given request specification, method, and route.
-     *
-     * @param request the request specification to send
-     * @param method  the method to use for the request
-     * @param route   the route to send the request to
-     * @return the response received from the fallback request
-     */
-    private Response sendFallbackRequest(RequestSpecification request, Method method, String route) {
-        if (secretsConfig.getEnvironment() != Environment.DEV) {
-            RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
-            requestSpecBuilder.addRequestSpecification(request);
-            requestSpecBuilder.setRelaxedHTTPSValidation();
-            requestSpecBuilder.setBaseUri(secretsConfig.getRestBaseUri());
-//            requestSpecBuilder.setBasePath(secretsConfig.getApiPath());
-            RequestSpecification fallbackRequest = requestSpecBuilder.build();
-            return getResponse(fallbackRequest, method, route);
-        }
-        throw new RuntimeException("Fallback request failed to sent.");
     }
     
     /**

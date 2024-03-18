@@ -12,8 +12,6 @@ import utils.service.implementation.Rest;
 import java.io.File;
 import java.util.Map;
 
-import static org.apache.http.HttpStatus.SC_OK;
-
 public class RestCommonRequests {
     
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(RestCommonRequests.class);
@@ -30,14 +28,6 @@ public class RestCommonRequests {
         resourcesConfig = new ResourcesConfig();
         validate = new RestCommonValidations(rest);
     }
-    
-    public void applicationIsUpAndRunning() {
-        logger.info(envDataConfig.getRestApiUrl());
-        rest.getRequest(RestEndpointEnum.BASE_PATH, "")
-                .then()
-                .statusCode(SC_OK);
-    }
-    
     
     /**
      * Sends a POST request to the specified endpoint with the given body.

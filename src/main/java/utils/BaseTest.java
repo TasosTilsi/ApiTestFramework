@@ -66,18 +66,18 @@ public class BaseTest {
     }
     
     public WebService before(String testStepDescription) {
-        logger.info("BEFORE TEST: " + testStepDescription);
+        logger.info("BEFORE TEST: {}", testStepDescription);
         return webService;
     }
     
     public WebService after(String testStepDescription) {
-        logger.info("AFTER TEST: " + testStepDescription);
+        logger.info("AFTER TEST: {}", testStepDescription);
         return webService;
     }
     
     @Step
     public WebService step(String testStepDescription) {
-        logger.info("TEST STEP: " + testStepDescription);
+        logger.info("TEST STEP: {}", testStepDescription);
         webService.context().setStepDescription(testStepDescription);
         return webService;
     }

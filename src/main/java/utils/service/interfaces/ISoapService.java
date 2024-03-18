@@ -26,5 +26,5 @@ public interface ISoapService extends IBaseService {
      * @param xmlBody    the XML body of the SOAP request
      * @return the Response object representing the response of the SOAP request
      */
-    Response postRequest(String baseUri, String basePath, String soapAction, String xmlBody);
+    Response postRequest(String baseUri, String basePath, String soapAction, Object xmlBody);
 }

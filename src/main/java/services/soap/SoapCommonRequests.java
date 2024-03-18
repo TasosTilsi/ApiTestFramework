@@ -11,8 +11,6 @@ import static org.apache.http.HttpStatus.SC_OK;
 public class SoapCommonRequests {
     
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(SoapCommonRequests.class);
-    private static String apiUsername;
-    private static String apiPassword;
     public SoapCommonValidations validate;
     protected Response response;
     protected Soap soap;

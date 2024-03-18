@@ -1,16 +1,18 @@
 package domain;
 
 
+import lombok.Getter;
 import utils.config.EnvDataConfig;
 
 public enum RestEndpointEnum {
+    API("/api"),
+    RESOURCE(API.getPath() + "/{resource}"),
+    USERS(API.getPath() + "/api/users/"),
+    LOGIN(API.getPath() + "/api/login"),
+    REGISTER(API.getPath() + "/api/register"),
+    LOGOUT(API.getPath() + "/api/logout");
     
-    // APIs
-    BASE_PATH("/"),
-    AUTHORS_PATH("/api/v1/Authors/"),
-    ACTIVITIES_PATH("/api/v1/Activities"),
-    PATH_READ_AUTHOR_BY_ID("/api/v1/Authors/{author_id}");
-    
+    @Getter
     private final String path;
     EnvDataConfig envDataConfig;
     
@@ -33,8 +35,4 @@ public enum RestEndpointEnum {
         return path;
     }
     
-    
-    public String getPath() {
-        return path;
-    }
 }
