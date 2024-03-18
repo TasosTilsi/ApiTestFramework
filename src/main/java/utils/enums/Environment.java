@@ -16,4 +16,12 @@ public enum Environment {
         this.name = name;
     }
     
+    public static Environment fromString(String name) {
+        for (Environment env : Environment.values()) {
+            if (env.name.equals(name)) {
+                return env;
+            }
+        }
+        throw new IllegalArgumentException("No constant with name " + name + " found");
+    }
 }

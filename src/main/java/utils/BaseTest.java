@@ -3,20 +3,18 @@ package utils;
 
 import com.google.common.collect.ImmutableMap;
 import io.qameta.allure.Step;
+import io.restassured.response.Response;
 import org.slf4j.Logger;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
+import utils.common.APITestRunner;
 import utils.config.EnvDataConfig;
-import utils.config.ResourcesConfig;
 import utils.config.TestDataConfig;
 import utils.service.implementation.WebService;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static com.github.automatedowl.tools.AllureEnvironmentWriter.allureEnvironmentWriter;
 
@@ -24,19 +22,10 @@ public class BaseTest {
     
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(BaseTest.class);
     private WebService webService;
-    
     private EnvDataConfig envDataConfig = new EnvDataConfig();
     
     @BeforeSuite(alwaysRun = true)
     public void baseTestBeforeSuite() {
-        
-        System.setProperty("org.freemarker.loggerLibrary", "none");
-        try {
-            Files.deleteIfExists(
-                    Paths.get(new ResourcesConfig().getTargetPath() + "test.json"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         setAllureEnvironment();
     }
     
@@ -51,12 +40,19 @@ public class BaseTest {
     }
     
     @BeforeMethod(alwaysRun = true)
-    public void baseTestBeforeMethod(ITestContext testContext) {
+    public void baseTestBeforeMethod(ITestResult result, ITestContext testContext) {
         before("BaseTest Before Method");
     }
     
+    protected Response executeAPITest() throws NoSuchMethodException {
+        String testMethodName = Thread.currentThread().getStackTrace()[2].getMethodName();
+        logger.warn("CHECK HERE: Execute API Test: {}", testMethodName);
+        APITestRunner apiTestRunner = new APITestRunner(getClass().getDeclaredMethod(testMethodName));
+        return apiTestRunner.runAPITest(webService);
+    }
+    
     @AfterMethod(alwaysRun = true)
-    public void baseTestAfterMethod(ITestResult result) throws IOException {
+    public void baseTestAfterMethod(ITestResult result) {
         after("BaseTest After Method");
     }
     

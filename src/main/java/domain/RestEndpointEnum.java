@@ -6,7 +6,7 @@ import utils.config.EnvDataConfig;
 
 public enum RestEndpointEnum {
     API("/api"),
-    RESOURCE(API.getPath() + "/{resource}"),
+    RESOURCE(API.getPath() + "/resource"),
     USERS(API.getPath() + "/api/users/"),
     LOGIN(API.getPath() + "/api/login"),
     REGISTER(API.getPath() + "/api/register"),

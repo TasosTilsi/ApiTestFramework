@@ -12,40 +12,48 @@ import utils.service.implementation.Soap;
 import utils.service.implementation.WebService;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class APITestRunner {
-    public Response runAPITest(WebService webService, java.lang.reflect.Method method, Object[] args) {
+    private final java.lang.reflect.Method method;
+    
+    public APITestRunner(java.lang.reflect.Method method) {
+        this.method = method;
+    }
+    
+    public Response runAPITest(WebService webService) {
         Response response = null;
         if (method.isAnnotationPresent(APITest.class)) {
             APITest apiTest = method.getAnnotation(APITest.class);
-            
             RequestType requestType = apiTest.requestType();
-            
             if (requestType == RequestType.REST) {
-                // Handle REST request
-                RestEndpointEnum endpoint = apiTest.restEndpoint();
-                Method methodType = apiTest.method();
-                String route = apiTest.route();
-                Object payload = apiTest.payload();
-                Map<String, Object> pathParams = parseParams(apiTest.pathParams());
-                Map<String, Object> queryParams = parseParams(apiTest.queryParams());
-                File file = null;
-                if (apiTest.filePath() != null && !apiTest.filePath().isEmpty()) {
-                    file = new File(apiTest.filePath());
-                }
-                response = makeRestRequest(webService, methodType, endpoint, route, payload, pathParams, queryParams, file);
+                response = handleRestRequest(apiTest, webService);
             } else if (requestType == RequestType.SOAP) {
-                // Handle SOAP request
-                SoapBasePathEnum endpoint = apiTest.soapEndpoint();
-                SoapActionEnum soapAction = apiTest.soapAction();
-                Object payload = apiTest.payload();
-                response = makeSoapRequest(webService, endpoint, soapAction, payload);
+                response = handleSoapRequest(apiTest, webService);
             }
         }
-        
         return response;
+    }
+    
+    private Response handleSoapRequest(APITest apiTest, WebService webService) {
+        SoapBasePathEnum endpoint = apiTest.soapEndpoint();
+        SoapActionEnum soapAction = apiTest.soapAction();
+        Object payload = apiTest.payload();
+        return makeSoapRequest(webService, endpoint, soapAction, payload);
+    }
+    
+    private Response handleRestRequest(APITest apiTest, WebService webService) {
+        RestEndpointEnum endpoint = apiTest.restEndpoint();
+        Method methodType = apiTest.method();
+        String route = apiTest.route();
+        Class<?> payload = apiTest.payload() != null && !NoPayload.class.isAssignableFrom(apiTest.payload()) ? apiTest.payload() : null;
+        Map<String, Object> pathParams = parseParams(apiTest.pathParams());
+        Map<String, Object> queryParams = parseParams(apiTest.queryParams());
+        File file = apiTest.filePath() != null && !apiTest.filePath().isEmpty() ? new File(apiTest.filePath()) : null;
+        return makeRestRequest(webService, methodType, endpoint, route, payload, pathParams, queryParams, file);
     }
     
     private Response makeRestRequest(WebService webService, Method methodType, RestEndpointEnum basePath, String route, Object payload, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
@@ -69,17 +77,13 @@ public class APITestRunner {
     }
     
     private Map<String, Object> parseParams(String[] params) {
-        Map<String, Object> paramMap = new HashMap<>();
-        if (params != null) {
-            for (String param : params) {
-                String[] keyValue = param.split("=", 2);
-                if (keyValue.length == 2) {
-                    paramMap.put(keyValue[0], keyValue[1]);
-                } else if (keyValue.length == 1) {
-                    paramMap.put(keyValue[0], null);
-                }
-            }
+        if (params == null) {
+            return Collections.emptyMap();
         }
-        return paramMap;
+        
+        return Arrays.stream(params)
+                .map(param -> param.split("=", 2))
+                .map(keyValue -> Map.entry(keyValue[0], keyValue.length > 1 ? (Object) keyValue[1] : null))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

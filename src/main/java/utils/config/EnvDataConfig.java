@@ -86,7 +86,7 @@ public class EnvDataConfig {
      * @return an instance of the `Environment` class representing the retrieved environment.
      */
     public Environment getEnvironment() {
-        return Environment.valueOf(getEnvironmentIdFromSelectedProfile());
+        return Environment.valueOf(getEnvironmentIdFromSelectedProfile().toUpperCase());
     }
     
     /**

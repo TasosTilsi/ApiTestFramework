@@ -4,6 +4,7 @@ import domain.RestEndpointEnum;
 import domain.SoapActionEnum;
 import domain.SoapBasePathEnum;
 import io.restassured.http.Method;
+import utils.common.NoPayload;
 import utils.enums.RequestType;
 
 import java.lang.annotation.ElementType;
@@ -16,17 +17,17 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface APITest {
     
-    RestEndpointEnum restEndpoint();
+    RestEndpointEnum restEndpoint() default RestEndpointEnum.API;
     
-    SoapBasePathEnum soapEndpoint();
+    SoapBasePathEnum soapEndpoint() default SoapBasePathEnum.SOAP_SERVICE;
     
-    SoapActionEnum soapAction();
+    SoapActionEnum soapAction() default SoapActionEnum.CREATE_USER_SERVICE;
     
     String route() default "";
     
-    Method method();
+    Method method() default Method.GET;
     
-    Class<?> payload() default Object.class;
+    Class<?> payload() default NoPayload.class;
     
     String[] pathParams() default {};
     

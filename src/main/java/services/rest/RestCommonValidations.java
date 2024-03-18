@@ -50,14 +50,14 @@ public class RestCommonValidations {
         return this;
     }
     
-    public RestCommonRequests validateResponseCodeAndContentType(int statusCode, String contentType) {
+    public RestCommonValidations validateResponseCodeAndContentType(int statusCode, String contentType) {
         logger.info("Starting validating the response...");
         getLastResponse().then().statusCode(statusCode);
         getLastResponse().then().contentType(contentType);
         logger.info("The response was validated successfully!!");
-        logger.info("Status code: " + getLastResponse().getStatusCode());
-        logger.info("Content type: " + getLastResponse().contentType());
-        return new RestCommonRequests(rest);
+        logger.info("Status code: {}", getLastResponse().getStatusCode());
+        logger.info("Content type: {}", getLastResponse().contentType());
+        return this;
     }
     
     public Response setLastResponse(Response response) {

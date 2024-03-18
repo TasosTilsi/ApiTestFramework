@@ -608,10 +608,10 @@ public class Rest implements IRestService {
         if (body != null) {
             request.body(body);
         }
-        if (pathParams != null) {
+        if (pathParams != null && !pathParams.isEmpty()) {
             request.pathParams(pathParams);
         }
-        if (queryParams != null) {
+        if (queryParams != null && !queryParams.isEmpty()) {
             request.queryParams(queryParams);
         }
         if (file != null && file.exists()) {
