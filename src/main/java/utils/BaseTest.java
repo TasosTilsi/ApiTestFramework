@@ -9,9 +9,9 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
-import utils.common.APITestRunner;
 import utils.config.EnvDataConfig;
 import utils.config.TestDataConfig;
+import utils.helpers.APITestRunner;
 import utils.service.implementation.WebService;
 
 import java.io.File;

@@ -1,9 +1,10 @@
 package utils.factories;
 
 import services.rest.RestCommonRequests;
+import utils.factories.interfaces.IRestServiceFactory;
 import utils.service.implementation.Rest;
 
-public class RestServiceObjectFactory {
+public class RestServiceObjectFactory implements IRestServiceFactory {
     private final Rest rest;
     
     public RestServiceObjectFactory(Rest rest) {

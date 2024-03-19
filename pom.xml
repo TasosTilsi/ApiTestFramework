@@ -193,6 +193,21 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.basedir}/test-results</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${project.basedir}/allure-report</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-help-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
@@ -247,21 +262,17 @@
                     </dependency>
                 </dependencies>
             </plugin>
-        </plugins>
-    </build>
-
-    <reporting>
-        <excludeDefaults>true</excludeDefaults>
-        <plugins>
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
                 <version>${allureMaven.version}</version>
                 <configuration>
+                    <reportVersion>${allure.rest.assured.version}</reportVersion>
                     <reportVersion>${allureTestNg.version}</reportVersion>
-                    <reportDirectory>${project.build.directory}/allure-results</reportDirectory>
+                    <reportDirectory>${basedir}/allure-report/</reportDirectory>
+                    <resultsDirectory>${basedir}/test-results/allure-results</resultsDirectory>
                 </configuration>
             </plugin>
         </plugins>
-    </reporting>
+    </build>
 </project>

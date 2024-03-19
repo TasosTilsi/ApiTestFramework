@@ -1,10 +1,10 @@
 package domain;
 
 
+import domain.interfaces.IEndpoint;
 import lombok.Getter;
-import utils.config.EnvDataConfig;
 
-public enum RestEndpointEnum {
+public enum RestEndpointEnum implements IEndpoint {
     API("/api"),
     RESOURCE(API.getPath() + "/resource"),
     USERS(API.getPath() + "/api/users/"),
@@ -14,11 +14,9 @@ public enum RestEndpointEnum {
     
     @Getter
     private final String path;
-    EnvDataConfig envDataConfig;
     
     RestEndpointEnum(String path) {
         this.path = path;
-        envDataConfig = new EnvDataConfig();
     }
     
     public static RestEndpointEnum get(String path) {

@@ -1,22 +1,25 @@
 package domain;
 
-public enum SoapActionEnum {
+import domain.interfaces.IEndpoint;
+
+public enum SoapActionEnum implements IEndpoint {
     
     CREATE_USER_SERVICE("someSoapAction");
     
-    private String value;
+    private final String path;
     
-    SoapActionEnum(String value) {
-        this.value = value;
-    }
-    
-    public String getValue() {
-        return value;
+    SoapActionEnum(String path) {
+        this.path = path;
     }
     
     
     @Override
+    public String getPath() {
+        return path;
+    }
+    
+    @Override
     public String toString() {
-        return value;
+        return path;
     }
 }

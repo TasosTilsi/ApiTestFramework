@@ -1,13 +1,14 @@
 package domain;
 
+import domain.interfaces.IEndpoint;
 import lombok.Getter;
 
-public enum SoapBasePathEnum {
+@Getter
+public enum SoapBasePathEnum implements IEndpoint {
     SOAP_SERVICE("/websamples.countryinfo"),
     COUNTRY_INFO(SOAP_SERVICE.getPath() + "/CountryInfoService.wso");
     
-    @Getter
-    private String path;
+    private final String path;
     
     SoapBasePathEnum(String path) {
         this.path = path;

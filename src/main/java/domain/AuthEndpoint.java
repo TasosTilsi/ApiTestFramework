@@ -1,15 +1,16 @@
 package domain;
 
 
+import domain.interfaces.IEndpoint;
 import utils.config.EnvDataConfig;
 
-public enum AuthEndpoint {
+public enum AuthEndpoint implements IEndpoint {
     
     // APIs
     AUTH_PATH("/somePath"),
     DEV_ENV_AUTH_PATH("/oauth/token");
     private final String path;
-    EnvDataConfig envDataConfig;
+    private final EnvDataConfig envDataConfig;
     
     AuthEndpoint(String path) {
         this.path = path;
@@ -32,7 +33,6 @@ public enum AuthEndpoint {
     
     
     public String getPath() {
-        envDataConfig = new EnvDataConfig();
         return envDataConfig.getRestApiUrl() + path;
     }
 }

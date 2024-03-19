@@ -1,5 +1,6 @@
 package utils.common;
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -26,31 +27,8 @@ import java.util.regex.Pattern;
 /**
  * The Utils class provides utility methods for various operations.
  */
+@UtilityClass
 public final class Utils {
-    
-    private static volatile Utils instance;
-    
-    /**
-     * Private constructor to prevent instantiation from outside the class.
-     */
-    private Utils() {
-    }
-    
-    /**
-     * Returns the instance of Utils using double-checked locking for thread safety.
-     *
-     * @return The instance of Utils.
-     */
-    public static Utils getInstance() {
-        if (instance == null) {
-            synchronized (Utils.class) {
-                if (instance == null) {
-                    instance = new Utils();
-                }
-            }
-        }
-        return instance;
-    }
     
     /**
      * Generates a random string of the specified length.

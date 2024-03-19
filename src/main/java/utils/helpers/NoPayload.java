@@ -1,4 +1,4 @@
-package utils.common;
+package utils.helpers;
 
 public class NoPayload {
     public static final NoPayload INSTANCE = new NoPayload();

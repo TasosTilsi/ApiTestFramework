@@ -103,6 +103,6 @@ public class Soap implements ISoapService {
      * @return a Response object representing the response of the POST request
      */
     public Response postRequest(SoapBasePathEnum basePath, SoapActionEnum soapAction, Object xmlBody) {
-        return postRequest(envDataConfig.getSoapApiUrl(), basePath.getPath(), soapAction.getValue(), xmlBody);
+        return postRequest(envDataConfig.getSoapApiUrl(), basePath.getPath(), soapAction.getPath(), xmlBody);
     }
 }

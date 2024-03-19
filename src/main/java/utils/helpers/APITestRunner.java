@@ -1,4 +1,4 @@
-package utils.common;
+package utils.helpers;
 
 import annotations.APITest;
 import domain.RestEndpointEnum;

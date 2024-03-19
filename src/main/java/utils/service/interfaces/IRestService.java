@@ -1,10 +1,10 @@
 package utils.service.interfaces;
 
-import domain.RestEndpointEnum;
+import domain.interfaces.IEndpoint;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import utils.factories.RestServiceObjectFactory;
+import utils.factories.interfaces.IRestServiceFactory;
 
 import java.io.File;
 import java.util.Map;
@@ -22,7 +22,7 @@ public interface IRestService extends IBaseService {
      *
      * @return an instance of RestServiceObjectFactory
      */
-    RestServiceObjectFactory service();
+    IRestServiceFactory service();
     
     /**
      * Sends a POST request to the specified route with the given parameters and returns a Response object.
@@ -36,7 +36,7 @@ public interface IRestService extends IBaseService {
      * @param file        the file to be sent with the HTTP request
      * @return the response of the HTTP request
      */
-    Response postRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
+    Response postRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
     
     /**
      * Sends a GET request to the specified route with the given parameters and returns a Response object.
@@ -50,7 +50,7 @@ public interface IRestService extends IBaseService {
      * @param file        the file to be included in the API call
      * @return the response of the API call
      */
-    Response getRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
+    Response getRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
     
     /**
      * Sends a DELETE request to the specified route with the given parameters and returns a Response object.
@@ -64,7 +64,7 @@ public interface IRestService extends IBaseService {
      * @param file        the file to be sent with the request
      * @return the response received from the server
      */
-    Response deleteRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
+    Response deleteRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
     
     /**
      * Sends a PUT request to the specified route with the provided request specification, base path, body, path parameters, query parameters, and file.
@@ -78,7 +78,7 @@ public interface IRestService extends IBaseService {
      * @param file        the file to be uploaded with the request
      * @return the response object
      */
-    Response putRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
+    Response putRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
     
     /**
      * Sends a PATCH request to the specified endpoint with the given parameters.
@@ -92,7 +92,7 @@ public interface IRestService extends IBaseService {
      * @param file        the file object
      * @return the Response object
      */
-    Response patchRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
+    Response patchRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
     
     /**
      * Creates a request specification with the given parameters.
@@ -106,7 +106,7 @@ public interface IRestService extends IBaseService {
      * @param file        the file object
      * @return the request specification object
      */
-    RequestSpecification createRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
+    RequestSpecification createRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file);
     
     /**
      * Sends a request using the provided request specification, HTTP method, and route.

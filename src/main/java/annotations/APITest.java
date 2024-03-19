@@ -4,8 +4,8 @@ import domain.RestEndpointEnum;
 import domain.SoapActionEnum;
 import domain.SoapBasePathEnum;
 import io.restassured.http.Method;
-import utils.common.NoPayload;
 import utils.enums.RequestType;
+import utils.helpers.NoPayload;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

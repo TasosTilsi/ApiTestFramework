@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
-import domain.RestEndpointEnum;
+import domain.interfaces.IEndpoint;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -24,6 +24,7 @@ import utils.common.SerializationUtil;
 import utils.config.SecretsConfig;
 import utils.enums.Environment;
 import utils.factories.RestServiceObjectFactory;
+import utils.factories.interfaces.IRestServiceFactory;
 import utils.service.interfaces.IRestService;
 
 import java.io.File;
@@ -43,10 +44,10 @@ public class Rest implements IRestService {
     
     public static final String REST_CONTENT_TYPE = "application/json";
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(Rest.class);
-    private final RestServiceObjectFactory restServiceObjectFactory;
     private final ContextData contextData;
+    private final ObjectMapper mapper = new ObjectMapper();
     protected SecretsConfig secretsConfig = new SecretsConfig();
-    private ObjectMapper mapper = new ObjectMapper();
+    private IRestServiceFactory restServiceObjectFactory;
     private RequestSpecification requestSpec;
     private ResponseSpecification responseSpec;
     
@@ -73,7 +74,7 @@ public class Rest implements IRestService {
      * @return an instance of RestServiceObjectFactory
      */
     @Override
-    public RestServiceObjectFactory service() {
+    public IRestServiceFactory service() {
         return this.restServiceObjectFactory;
     }
     
@@ -95,7 +96,7 @@ public class Rest implements IRestService {
      * @param body     the request body.
      * @return the response of the request.
      */
-    public Response postRequest(RestEndpointEnum basePath, String route, Object body) {
+    public Response postRequest(IEndpoint basePath, String route, Object body) {
         return postRequest(requestSpec, basePath, route, body, null, null, null);
     }
     
@@ -108,7 +109,7 @@ public class Rest implements IRestService {
      * @param pathParams the path parameters of the endpoint.
      * @return the response of the request.
      */
-    public Response postRequest(RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams) {
+    public Response postRequest(IEndpoint basePath, String route, Object body, Map<String, Object> pathParams) {
         return postRequest(requestSpec, basePath, route, body, pathParams, null, null);
     }
     
@@ -122,7 +123,7 @@ public class Rest implements IRestService {
      * @param pathParameterValue the value of the path parameter.
      * @return the response of the request.
      */
-    public Response postRequest(RestEndpointEnum basePath, String route, Object body, String pathParameterName, Object pathParameterValue) {
+    public Response postRequest(IEndpoint basePath, String route, Object body, String pathParameterName, Object pathParameterValue) {
         Map<String, Object> pathParams = Map.of(pathParameterName, pathParameterValue);
         return postRequest(requestSpec, basePath, route, body, pathParams, null, null);
     }
@@ -136,7 +137,7 @@ public class Rest implements IRestService {
      * @param file     the file to send in the request.
      * @return the response of the request.
      */
-    public Response postRequest(RestEndpointEnum basePath, String route, Object body, File file) {
+    public Response postRequest(IEndpoint basePath, String route, Object body, File file) {
         return postRequest(requestSpec, basePath, route, body, null, null, file);
     }
     
@@ -150,7 +151,7 @@ public class Rest implements IRestService {
      * @param file       the file to send in the request.
      * @return the response of the request.
      */
-    public Response postRequest(RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, File file) {
+    public Response postRequest(IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, File file) {
         return postRequest(requestSpec, basePath, route, body, pathParams, null, file);
     }
     
@@ -165,7 +166,7 @@ public class Rest implements IRestService {
      * @param file               the file to send in the request.
      * @return the response of the request.
      */
-    public Response postRequest(RestEndpointEnum basePath, String route, Object body, String pathParameterName, Object pathParameterValue, File file) {
+    public Response postRequest(IEndpoint basePath, String route, Object body, String pathParameterName, Object pathParameterValue, File file) {
         Map<String, Object> pathParams = Map.of(pathParameterName, pathParameterValue);
         return postRequest(requestSpec, basePath, route, body, pathParams, null, file);
     }
@@ -180,7 +181,7 @@ public class Rest implements IRestService {
      * @param file        the file to send in the request.
      * @return the response of the request.
      */
-    public Response postRequest(RestEndpointEnum basePath, String route, Object body, File file, Map<String, Object> queryParams) {
+    public Response postRequest(IEndpoint basePath, String route, Object body, File file, Map<String, Object> queryParams) {
         return postRequest(requestSpec, basePath, route, body, null, queryParams, file);
     }
     
@@ -195,7 +196,7 @@ public class Rest implements IRestService {
      * @param file                the file to send in the request.
      * @return the response of the request.
      */
-    public Response postRequest(RestEndpointEnum basePath, String route, Object body, File file, String queryParameterName, Object queryParameterValue) {
+    public Response postRequest(IEndpoint basePath, String route, Object body, File file, String queryParameterName, Object queryParameterValue) {
         Map<String, Object> queryParams = Map.of(queryParameterName, queryParameterValue);
         return postRequest(requestSpec, basePath, route, body, null, queryParams, file);
     }
@@ -207,7 +208,7 @@ public class Rest implements IRestService {
      * @param route    the route of the endpoint.
      * @return the response of the request.
      */
-    public Response getRequest(RestEndpointEnum basePath, String route) {
+    public Response getRequest(IEndpoint basePath, String route) {
         return getRequest(basePath, route, JSON);
     }
     
@@ -219,7 +220,7 @@ public class Rest implements IRestService {
      * @param contentType the content type of the request
      * @return the response from the GET request
      */
-    public Response getRequest(RestEndpointEnum basePath, String route, ContentType contentType) {
+    public Response getRequest(IEndpoint basePath, String route, ContentType contentType) {
         return getRequest(getRequestSpec(contentType), basePath, route, null, null, null, null);
     }
     
@@ -231,7 +232,7 @@ public class Rest implements IRestService {
      * @param queryParams the query parameters of the endpoint.
      * @return the response of the request.
      */
-    public Response getRequestWithQueryParams(RestEndpointEnum basePath, String route, Map<String, Object> queryParams) {
+    public Response getRequestWithQueryParams(IEndpoint basePath, String route, Map<String, Object> queryParams) {
         return getRequest(requestSpec, basePath, route, null, null, queryParams, null);
     }
     
@@ -244,7 +245,7 @@ public class Rest implements IRestService {
      * @param parameterValue the value of the query parameter
      * @return the response object
      */
-    public Response getRequestWithQueryParams(RestEndpointEnum basePath, String route, String parameterName, Object parameterValue) {
+    public Response getRequestWithQueryParams(IEndpoint basePath, String route, String parameterName, Object parameterValue) {
         Map<String, Object> queryParams = Map.of(parameterName, parameterValue);
         return getRequestWithQueryParams(basePath, route, queryParams);
     }
@@ -257,7 +258,7 @@ public class Rest implements IRestService {
      * @param pathParams the path parameters of the endpoint.
      * @return the response of the request.
      */
-    public Response getRequestWithPathParams(RestEndpointEnum basePath, String route, Map<String, Object> pathParams) {
+    public Response getRequestWithPathParams(IEndpoint basePath, String route, Map<String, Object> pathParams) {
         return getRequestWithPathParams(basePath, route, pathParams, JSON);
     }
     
@@ -270,7 +271,7 @@ public class Rest implements IRestService {
      * @param contentType the content type of the request
      * @return the response of the GET request
      */
-    public Response getRequestWithPathParams(RestEndpointEnum basePath, String route, Map<String, Object> pathParams, ContentType contentType) {
+    public Response getRequestWithPathParams(IEndpoint basePath, String route, Map<String, Object> pathParams, ContentType contentType) {
         return getRequest(getRequestSpec(contentType), basePath, route, null, pathParams, null, null);
     }
     
@@ -283,7 +284,7 @@ public class Rest implements IRestService {
      * @param parameterValue the value of the path parameter.
      * @return the response of the request.
      */
-    public Response getRequestWithPathParams(RestEndpointEnum basePath, String route, String parameterName, Object parameterValue) {
+    public Response getRequestWithPathParams(IEndpoint basePath, String route, String parameterName, Object parameterValue) {
         Map<String, Object> pathParams = Map.of(parameterName, parameterValue);
         return getRequestWithPathParams(basePath, route, pathParams, JSON);
     }
@@ -297,7 +298,7 @@ public class Rest implements IRestService {
      * @param pathParams the path parameters of the endpoint.
      * @return the response of the request.
      */
-    public Response putRequest(RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams) {
+    public Response putRequest(IEndpoint basePath, String route, Object body, Map<String, Object> pathParams) {
         return putRequest(requestSpec, basePath, route, body, pathParams, null, null);
     }
     
@@ -311,7 +312,7 @@ public class Rest implements IRestService {
      * @param pathParameterValue the value of the path parameter.
      * @return the response of the request.
      */
-    public Response putRequest(RestEndpointEnum basePath, String route, Object body, String pathParameterName, Object pathParameterValue) {
+    public Response putRequest(IEndpoint basePath, String route, Object body, String pathParameterName, Object pathParameterValue) {
         Map<String, Object> pathParams = Map.of(pathParameterName, pathParameterValue);
         return putRequest(basePath, route, body, pathParams);
     }
@@ -324,7 +325,7 @@ public class Rest implements IRestService {
      * @param pathParams the path parameters of the REST endpoint
      * @return the Response object returned by the REST endpoint
      */
-    public Response putRequest(RestEndpointEnum basePath, String route, Map<String, Object> pathParams) {
+    public Response putRequest(IEndpoint basePath, String route, Map<String, Object> pathParams) {
         return putRequest(requestSpec, basePath, route, null, pathParams, null, null);
     }
     
@@ -337,7 +338,7 @@ public class Rest implements IRestService {
      * @param pathParameterValue the value of the path parameter
      * @return the response from the PUT request
      */
-    public Response putRequest(RestEndpointEnum basePath, String route, String pathParameterName, Object pathParameterValue) {
+    public Response putRequest(IEndpoint basePath, String route, String pathParameterName, Object pathParameterValue) {
         Map<String, Object> pathParams = Map.of(pathParameterName, pathParameterValue);
         return putRequest(requestSpec, basePath, route, null, pathParams, null, null);
     }
@@ -359,7 +360,7 @@ public class Rest implements IRestService {
      * @param pathParams the path parameters of the request
      * @return the response of the request
      */
-    public Response deleteRequest(RestEndpointEnum basePath, String route, Map<String, Object> pathParams) {
+    public Response deleteRequest(IEndpoint basePath, String route, Map<String, Object> pathParams) {
         return deleteRequest(requestSpec, basePath, route, null, pathParams, null, null);
     }
     
@@ -372,7 +373,7 @@ public class Rest implements IRestService {
      * @param pathParameterValue the value of the path parameter
      * @return the response of the delete request
      */
-    public Response deleteRequest(RestEndpointEnum basePath, String route, String pathParameterName, Object pathParameterValue) {
+    public Response deleteRequest(IEndpoint basePath, String route, String pathParameterName, Object pathParameterValue) {
         Map<String, Object> pathParams = Map.of(pathParameterName, pathParameterValue);
         return deleteRequest(basePath, route, pathParams);
     }
@@ -386,7 +387,7 @@ public class Rest implements IRestService {
      * @param pathParams the path parameters of the request
      * @return the response received from the server
      */
-    public Response deleteRequest(RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams) {
+    public Response deleteRequest(IEndpoint basePath, String route, Object body, Map<String, Object> pathParams) {
         return deleteRequest(requestSpec, basePath, route, body, pathParams, null, null);
     }
     
@@ -400,7 +401,7 @@ public class Rest implements IRestService {
      * @param pathParameterValue the value of the path parameter
      * @return the response of the delete request
      */
-    public Response deleteRequest(RestEndpointEnum basePath, String route, Object body, String pathParameterName, Object pathParameterValue) {
+    public Response deleteRequest(IEndpoint basePath, String route, Object body, String pathParameterName, Object pathParameterValue) {
         Map<String, Object> pathParams = Map.of(pathParameterName, pathParameterValue);
         return deleteRequest(basePath, route, body, pathParams);
     }
@@ -472,7 +473,7 @@ public class Rest implements IRestService {
      * @return the response of the request
      */
     @Override
-    public Response postRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
+    public Response postRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
         return sendRequest(
                 createRequest(requestSpec,
                         basePath,
@@ -498,7 +499,7 @@ public class Rest implements IRestService {
      * @return a Response object containing the response from the server
      */
     @Override
-    public Response getRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
+    public Response getRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
         return sendRequest(
                 createRequest(requestSpec,
                         basePath,
@@ -524,7 +525,7 @@ public class Rest implements IRestService {
      * @return the response of the request
      */
     @Override
-    public Response deleteRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
+    public Response deleteRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
         return sendRequest(
                 createRequest(requestSpec,
                         basePath,
@@ -550,7 +551,7 @@ public class Rest implements IRestService {
      * @return the response
      */
     @Override
-    public Response putRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
+    public Response putRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
         return sendRequest(
                 createRequest(requestSpec,
                         basePath,
@@ -576,7 +577,7 @@ public class Rest implements IRestService {
      * @return the response received from the server
      */
     @Override
-    public Response patchRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
+    public Response patchRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
         return sendRequest(
                 createRequest(requestSpec,
                         basePath,
@@ -602,7 +603,7 @@ public class Rest implements IRestService {
      * @return the created request specification
      */
     @Override
-    public RequestSpecification createRequest(RequestSpecification requestSpec, RestEndpointEnum basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
+    public RequestSpecification createRequest(RequestSpecification requestSpec, IEndpoint basePath, String route, Object body, Map<String, Object> pathParams, Map<String, Object> queryParams, File file) {
         RequestSpecification request = RestAssured.given(requestSpec)
                 .basePath(basePath.getPath());
         if (body != null) {
