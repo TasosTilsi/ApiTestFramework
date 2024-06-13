@@ -3,8 +3,9 @@ package utils.service.implementation;
 
 import models.ContextData;
 import org.slf4j.Logger;
-import utils.config.EnvDataConfig;
 import utils.service.interfaces.IBaseService;
+import utils.service.interfaces.IRestService;
+import utils.service.interfaces.ISoapService;
 
 /**
  * This class represents a web service and implements the BaseService interface.
@@ -14,9 +15,8 @@ import utils.service.interfaces.IBaseService;
 public class WebService implements IBaseService {
     
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(WebService.class);
-    protected EnvDataConfig envDataConfig = new EnvDataConfig();
-    private Rest rest;
-    private Soap soap;
+    private IRestService rest;
+    private ISoapService soap;
     private ContextData contextData;
     
     /**
@@ -44,7 +44,7 @@ public class WebService implements IBaseService {
      *
      * @return the REST service
      */
-    public Rest rest() {
+    public IRestService rest() {
         return this.rest;
     }
     
@@ -53,7 +53,7 @@ public class WebService implements IBaseService {
      *
      * @return the SOAP service
      */
-    public Soap soap() {
+    public ISoapService soap() {
         return this.soap;
     }
 }

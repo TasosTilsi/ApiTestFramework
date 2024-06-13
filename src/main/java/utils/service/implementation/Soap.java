@@ -91,6 +91,8 @@ public class Soap implements ISoapService {
                 .body(xmlBody)
                 .post();
         this.contextData.setLastResponse(response);
+        this.contextData.setResponseTime(response.getTime());
+        logger.info("Step: {} + Response time: {}", this.contextData.getStepDescription(), this.contextData.getResponseTime());
         return response;
     }
     

@@ -4,6 +4,8 @@ import domain.interfaces.IEndpoint;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
+import models.ContextData;
 import utils.factories.interfaces.IRestServiceFactory;
 
 import java.io.File;
@@ -14,7 +16,7 @@ import java.util.Map;
  * It provides methods for creating service objects, making Jira requests, and
  * making POST requests.
  */
-public interface IRestService extends IBaseService {
+public interface IRestService {
     
     /**
      * Returns an instance of the RestServiceObjectFactory class.
@@ -23,6 +25,13 @@ public interface IRestService extends IBaseService {
      * @return an instance of RestServiceObjectFactory
      */
     IRestServiceFactory service();
+    
+    /**
+     * Returns the context factory for this REST service.
+     *
+     * @return the context factory
+     */
+    ContextData context();
     
     /**
      * Sends a POST request to the specified route with the given parameters and returns a Response object.
@@ -117,4 +126,19 @@ public interface IRestService extends IBaseService {
      * @return the response received from the server
      */
     Response sendRequest(RequestSpecification request, Method method, String route);
+    
+    /**
+     * Gets the request specification to use in the requests, with a specific country code.
+     *
+     * @return the request specification.
+     */
+    RequestSpecification getRequestSpec();
+    
+    
+    /**
+     * Gets the response specification to use in the requests.
+     *
+     * @return the response specification.
+     */
+    ResponseSpecification getResponseSpec();
 }

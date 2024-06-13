@@ -13,19 +13,29 @@ import utils.config.EnvDataConfig;
 import utils.config.TestDataConfig;
 import utils.helpers.APITestRunner;
 import utils.service.implementation.WebService;
+import utils.service.interfaces.IBaseService;
 
 import java.io.File;
 
 import static com.github.automatedowl.tools.AllureEnvironmentWriter.allureEnvironmentWriter;
 
-public class BaseTest {
+public abstract class BaseTest implements IBaseTest {
     
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(BaseTest.class);
-    private WebService webService;
+    private static boolean logged = false;
+    private IBaseService webService;
     private EnvDataConfig envDataConfig = new EnvDataConfig();
+    
+    public static synchronized void logOnce() {
+        if (!logged) {
+            logger.info("Logging something only once when class is accessed");
+            logged = true;
+        }
+    }
     
     @BeforeSuite(alwaysRun = true)
     public void baseTestBeforeSuite() {
+        logOnce();
         setAllureEnvironment();
     }
     
@@ -61,20 +71,28 @@ public class BaseTest {
         after("BaseTest After Suite");
     }
     
-    public WebService before(String testStepDescription) {
+    public IBaseService before(String testStepDescription) {
         logger.info("BEFORE TEST: {}", testStepDescription);
+        webService.context().setStepDescription(testStepDescription);
+        webService.rest().context().setStepDescription(testStepDescription);
+        webService.soap().context().setStepDescription(testStepDescription);
         return webService;
     }
     
-    public WebService after(String testStepDescription) {
+    public IBaseService after(String testStepDescription) {
         logger.info("AFTER TEST: {}", testStepDescription);
+        webService.context().setStepDescription(testStepDescription);
+        webService.rest().context().setStepDescription(testStepDescription);
+        webService.soap().context().setStepDescription(testStepDescription);
         return webService;
     }
     
     @Step
-    public WebService step(String testStepDescription) {
+    public IBaseService step(String testStepDescription) {
         logger.info("TEST STEP: {}", testStepDescription);
         webService.context().setStepDescription(testStepDescription);
+        webService.rest().context().setStepDescription(testStepDescription);
+        webService.soap().context().setStepDescription(testStepDescription);
         return webService;
     }
     

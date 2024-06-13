@@ -8,6 +8,10 @@ import models.ContextData;
  */
 public interface IBaseService {
     
+    IRestService rest();
+    
+    ISoapService soap();
+    
     /**
      * Returns the context factory for this service.
      *

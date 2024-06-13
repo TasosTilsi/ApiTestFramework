@@ -9,4 +9,5 @@ public class ContextData {
     private Response lastResponse;
     private String id;
     private String testName;
+    private Long responseTime;
 }

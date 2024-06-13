@@ -9,13 +9,13 @@ public class GeneralResponseDTO {
     private int page;
     
     @JsonProperty("per_page")
-    private int per_page;
+    private int perPage;
     
     @JsonProperty("total")
     private int total;
     
     @JsonProperty("total_pages")
-    private int total_pages;
+    private int totalPages;
     
     @JsonProperty("support")
     private SupportDTO support;

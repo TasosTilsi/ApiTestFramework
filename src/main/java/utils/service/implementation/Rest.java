@@ -661,6 +661,7 @@ public class Rest implements IRestService {
                 .extract()
                 .response();
         this.contextData.setLastResponse(response);
+        this.contextData.setResponseTime(response.getTime());
         return response;
     }
 }
