@@ -4,6 +4,7 @@
     <listeners>
         <listener class-name="utils.listeners.TestListener"/>
         <listener class-name="utils.listeners.RetryListener"/>
+        <listener class-name="utils.listeners.SkipTestListener"/>
     </listeners>
     <test name="TC_API_DEMO" parallel="methods">
         <classes>

@@ -242,7 +242,8 @@
                             <name>listener</name>
                             <value>
                                 utils.listeners.TestListener,
-                                utils.listeners.RetryListener
+                                utils.listeners.RetryListener,
+                                utils.listeners.SkipTestListener
                             </value>
                         </property>
                         <property>

@@ -1,15 +1,19 @@
 package TS_API_Users;
 
 import annotations.APITest;
+import annotations.SkipTest;
 import domain.RestEndpointEnum;
 import io.restassured.http.Method;
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import services.rest.resource.UnknownResourceResponseDTO;
 import utils.BaseTest;
+import utils.enums.Environment;
 
 import static org.apache.http.HttpStatus.SC_OK;
 
+@Listeners(utils.listeners.SkipTestListener.class)
 public class TC_API_DEMO extends BaseTest {
     
     @Test(description = "GET /api/{resource}")
@@ -74,6 +78,7 @@ public class TC_API_DEMO extends BaseTest {
     
     @Test(description = "GET /api/{resource} with body")
     @APITest(restEndpoint = RestEndpointEnum.RESOURCE, method = Method.GET, queryParams = {"page=2", "per_page=1"}, filePath = "/src/test/resources/TS_API_Users/TC_API_01_001_AuthorsTest_step5.json")
+    @SkipTest(description = "Skip GET /api/{resource} with body", environments = {Environment.DEV})
     public void TC_API_01_001_AuthorsTest_step5() throws NoSuchMethodException {
         UnknownResourceResponseDTO response = executeAPITest().as(UnknownResourceResponseDTO.class);
         step("Verify response is not null")
@@ -85,4 +90,5 @@ public class TC_API_DEMO extends BaseTest {
         
         Assert.assertNotNull(response, "Response is null");
     }
+    
 }
